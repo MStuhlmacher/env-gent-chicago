@@ -2,6 +2,7 @@
 Empirical examination of the role of formal and informal greenspace in environmental gentrification in Chicago between 1990 and 2015. Analysis employs publicly available satellite, census, and land use data (see below for the list of data and sources). 
 
 ## Methodology Diagram:
+![alt text](images/MethodFlowchart.png "Methodology Diagram")
 
 # Software Requirements:
 R version 4.0.2
