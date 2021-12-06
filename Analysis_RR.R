@@ -813,6 +813,10 @@ DFsf$trnstDistM = apply(gDistance(centroid_sp, transit_sp, byid = TRUE), 2, min)
 DFsf_m = st_drop_geometry(DFsf) #remove geometry
 DF = merge(DF, DFsf_m, by.x = "cluster_id", by.y = "cluster_id", all.x = TRUE)
 
+#Round columns
+is.num = sapply(DF, is.numeric)
+DF[is.num] = lapply(DF[is.num], round, 3)
+
 # STEP 8 -----------------------------------------------
 #Calculate percent change for the variables (subtract the two years) 
 
@@ -826,11 +830,13 @@ DF$pctC_prkG90_00 = (DF$pA_prkG00 - DF$pA_prkG90)
 DF$BpctC_prkG90_00 = DF$pctC_prkG90_00 > 0
 DF$BpctC_prkG90_00 = as.integer(DF$BpctC_prkG90_00)
 
-#Vacant greenspace (should we change the direction of this one because an increase in vacant greenspace is negative?)
+#Vacant greenspace
 DF$pctC_vacG90_00 = (DF$pA_vacG00 - DF$pA_vacG90)
+hist(DF$pctC_vacG90_00)
 #Binary vacant greenspace
 DF$BpctC_vacG90_00 = DF$pctC_vacG90_00 > 0
 DF$BpctC_vacG90_00 = as.integer(DF$BpctC_vacG90_00)
+hist(DF$BpctC_vacG90_00)
 
 #All other greenspace
 DF$pctC_othG90_00 = (DF$pA_othG00 - DF$pA_othG90)
@@ -872,11 +878,13 @@ DF$pctC_prkG00_10 = (DF$pA_prkG10 - DF$pA_prkG00)
 DF$BpctC_prkG00_10 = DF$pctC_prkG00_10 > 0
 DF$BpctC_prkG00_10 = as.integer(DF$BpctC_prkG00_10)
 
-#Vacant greenspace (should we change the direction of this one because an increase in vacant greenspace is negative?)
+#Vacant greenspace
 DF$pctC_vacG00_10 = (DF$pA_vacG10 - DF$pA_vacG00)
+hist(DF$pctC_vacG00_10,breaks = 50)
 #Binary vacant greenspace
 DF$BpctC_vacG00_10 = DF$pctC_vacG00_10 > 0
 DF$BpctC_vacG00_10 = as.integer(DF$BpctC_vacG00_10)
+hist(DF$BpctC_vacG00_10)
 
 #All other greenspace
 DF$pctC_othG00_10 = (DF$pA_othG10 - DF$pA_othG00)
@@ -918,11 +926,15 @@ DF$pctC_prkG10_15 = (DF$pA_prkG15 - DF$pA_prkG10)
 DF$BpctC_prkG10_15 = DF$pctC_prkG10_15 > 0
 DF$BpctC_prkG10_15 = as.integer(DF$BpctC_prkG10_15)
 
-#Vacant greenspace (should we change the direction of this one because an increase in vacant greenspace is negative?)
-DF$pctC_vacG10_15 = (DF$pA_vacG15 - DF$pA_vacG10)
+#Vacant greenspace
+DF$pctC_vacG10_15 = (DF$pA_vacG15 - DF$pA_vacG10) 
+#plot histogram
+hist(DF$pctC_vacG10_15)
 #Binary vacant greenspace
 DF$BpctC_vacG10_15 = DF$pctC_vacG10_15 > 0
 DF$BpctC_vacG10_15 = as.integer(DF$BpctC_vacG10_15)
+#plot histogram
+hist(DF$BpctC_vacG10_15)
 
 #All other greenspace
 DF$pctC_othG10_15 = (DF$pA_othG15 - DF$pA_othG10)
@@ -1077,6 +1089,12 @@ model90_00GE_R = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_vacG90_00 + BpctC_ot
 
 summary(model90_00GE_R)
 OddsRatio(model90_00GE_R) #glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+model90_00GE_R_nb = glm(gentSDR90_00 ~ pctC_prkG90_00 + pctC_vacG90_00 + pctC_othG90_00 + dwntwnM + trnstDistM + pctC_pctV90_00 + pctC_pctHUD90_00 + pctC_pplSqM90_00 +
+                          pctC_pct30H90_00, family = "binomial", data = DF_GE90)
+
+summary(model90_00GE_R_nb)
+OddsRatio(model90_00GE_R_nb) #don't get the fit error with all non-binary variables and the percent area of vacant removed
 
 #Calculate McFadden R2
 PseudoR2(model90_00GE_R,c("McFadden","McFaddenAdj"))
