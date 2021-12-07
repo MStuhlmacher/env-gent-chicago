@@ -15,7 +15,9 @@
 library(dplyr)
 library(ggplot2)
 library(gridExtra)
-library(scale)
+library(scales)
+library(tidyr)
+library(raster)
 
 #Set working directory
 setwd("C:/Users/mstuhlm1/OneDrive - DePaul University/Research/EnvGentrification/Data") #work laptop
@@ -1431,7 +1433,7 @@ summary_ndvi = rbind(summary_ndvi70th,summary_ndvi75th,summary_ndvi80th,summary_
 pGreenSqM = ggplot(data = summary_ndvi, aes(x = Year, y = GreenSqM, group = Percentile, color = Percentile)) +
   geom_line(size = 2)+
   ylab("Greenspace (m²)")+
-  scale_y_continuous(label=scientific_format(digits=1))+ 
+  scale_y_continuous(label=scientific_format(digits=2))+ 
   scale_color_brewer(palette = 'Greens',direction = -1)+
   theme(text=element_text(size = 15),
         legend.position='top', 
@@ -1441,6 +1443,7 @@ pGreenSqM = ggplot(data = summary_ndvi, aes(x = Year, y = GreenSqM, group = Perc
 
 pParkGreenSqM = ggplot(data = summary_ndvi, aes(x = Year, y = ParkGreenSqM, group = Percentile, color = Percentile)) +
   geom_line(size = 2)+
+  scale_y_continuous(label=scientific_format(digits=2))+ 
   ylab("Greenspace (m²)")+
   scale_color_brewer(palette = 'Greens',direction = -1)+
   theme(text=element_text(size = 15),
@@ -1451,6 +1454,7 @@ pParkGreenSqM = ggplot(data = summary_ndvi, aes(x = Year, y = ParkGreenSqM, grou
 
 pVacantGreenSqM = ggplot(data = summary_ndvi, aes(x = Year, y = VacGreenSqM, group = Percentile, color = Percentile)) +
   geom_line(size = 2)+
+  scale_y_continuous(label=scientific_format(digits=2))+ 
   ylab("Greenspace (m²)")+
   scale_color_brewer(palette = 'Greens',direction = -1)+
   theme(text=element_text(size = 15),
@@ -1461,6 +1465,7 @@ pVacantGreenSqM = ggplot(data = summary_ndvi, aes(x = Year, y = VacGreenSqM, gro
 
 pInfGreenSqM = ggplot(data = summary_ndvi, aes(x = Year, y = OtherGreenSqM, group = Percentile, color = Percentile)) +
   geom_line(size = 2)+
+  scale_y_continuous(label=scientific_format(digits=2))+ 
   ylab("Greenspace (m²)")+
   scale_color_brewer(palette = 'Greens',direction = -1)+
   theme()+
