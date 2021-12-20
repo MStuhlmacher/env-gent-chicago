@@ -973,82 +973,68 @@ DF[c('pct_hud90','pct_hud00','pct_hud10','pctC_pctHUD90_00','pctC_pctHUD00_10',
 # STEP 8A -----------------------------------------------
 #Set up data for exporting to make figures
 
-# #Create a column for each year that shows what type of gentrification occurred:
-# #0 = not GE,
-# #1 = GE, gentrified (non-race def),
-# #2 = GE, gentrified (race def),
-# #3 = GE, gentrified (both defs),
-# #4 = GE, did not gentrify (both defs)
-# 
-# #1990-2000
-# DF$GType90_00 = ifelse(DF$GE90 == 0, 0, 
-#                        ifelse(DF$GE90 == 1 & DF$gent90_00 == 1 & DF$gentSDR90_00 == 0, 1,
-#                               ifelse(DF$GE90 == 1 & DF$gent90_00 == 0 & DF$gentSDR90_00 == 1, 2,
-#                                      ifelse(DF$GE90 == 1 & DF$gent90_00 == 1 & DF$gentSDR90_00 == 1, 3,
-#                                             ifelse(DF$GE90 == 1 & DF$gent90_00 == 0 & DF$gentSDR90_00 == 0, 4,
-#                                                    "ERROR")))))
-# #2000-2010
-# DF$GType00_10 = ifelse(DF$GE00 == 0, 0, 
-#                        ifelse(DF$GE00 == 1 & DF$gent00_10 == 1 & DF$gentSDR00_10 == 0, 1,
-#                               ifelse(DF$GE00 == 1 & DF$gent00_10 == 0 & DF$gentSDR00_10 == 1, 2,
-#                                      ifelse(DF$GE00 == 1 & DF$gent00_10 == 1 & DF$gentSDR00_10 == 1, 3,
-#                                             ifelse(DF$GE00 == 1 & DF$gent00_10 == 0 & DF$gentSDR00_10 == 0, 4,
-#                                                    "ERROR")))))
-# #2010-2015
-# DF$GType10_15 = ifelse(DF$GE10 == 0, 0, 
-#                        ifelse(DF$GE10 == 1 & DF$gent10_15 == 1 & DF$gentSDR10_15 == 0, 1,
-#                               ifelse(DF$GE10 == 1 & DF$gent10_15 == 0 & DF$gentSDR10_15 == 1, 2,
-#                                      ifelse(DF$GE10 == 1 & DF$gent10_15 == 1 & DF$gentSDR10_15 == 1, 3,
-#                                             ifelse(DF$GE10 == 1 & DF$gent10_15 == 0 & DF$gentSDR10_15 == 0, 4,
-#                                                    "ERROR")))))
-# 
-# #Count the number of gentrification eligible census tracts that were the same across the three periods
-# DF$GE_allYears = ifelse(DF$GE90 == 1 & DF$GE00 == 1 & DF$GE10 == 1, 1,
-#                         0)
-# sum(DF$GE_allYears)
-# 
-# #Create new dataframe for export, select only new variables and the greenspace variables
-# figDF = DF[, c('cluster_id','GType90_00','GType00_10','GType10_15','pctC_infG90_00','pctC_formG90_00',
-#                'pctC_infG00_10','pctC_formG00_10','pctC_infG10_15','pctC_formG10_15')]
-# 
-# #Rename to shorten column names
-# oldnames_fig = c('cluster_id','GType90_00','GType00_10','GType10_15','pctC_infG90_00','pctC_formG90_00',
-#              'pctC_infG00_10','pctC_formG00_10','pctC_infG10_15','pctC_formG10_15')
-# newnames_fig = c('cluster_id','GType90_00','GType00_10','GType10_15','pCinf90_00','pCfrm90_00',
-#              'pCinf00_10','pCfrm00_10','pCinf10_15','pCfrm10_15')
-# 
-# figDF = figDF %>% rename_at(vars(oldnames_fig), ~ newnames_fig)
-# 
-# #Descriptive stats for results section
-# sum(figDF$pCinf90_00 > 0.01)
-# sum(figDF$pCinf90_00 < -0.01)
-# 
-# sum(figDF$pCinf00_10 > 0.01)
-# sum(figDF$pCinf00_10 < -0.01)
-# 
-# sum(figDF$pCinf10_15 > 0.01)
-# sum(figDF$pCinf10_15 < -0.01)
-# 
+#Create a column for each year that shows what type of gentrification occurred:
+#0 = not GE,
+#1 = GE, did not gentrify
+#2 = GE, gentrified (race def),
+
+#1990-2000
+DF$GType90_00 = ifelse(DF$GE90 == 0, 0,
+                       ifelse(DF$GE90 == 1 & DF$gentSDR90_00 == 0 , 1,
+                              ifelse(DF$GE90 == 1 & DF$gentSDR90_00 == 1, 2,
+                                     "ERROR")))
+#2000-2010
+DF$GType00_10 = ifelse(DF$GE00 == 0, 0,
+                       ifelse(DF$GE00 == 1 & DF$gentSDR00_10 == 0 , 1,
+                              ifelse(DF$GE00 == 1 & DF$gentSDR00_10 == 1, 2,
+                                     "ERROR")))                       
+                       
+#Count the number of gentrification eligible census tracts that were the same across the three periods
+DF$GE_allYears = ifelse(DF$GE90 == 1 & DF$GE00 == 1, 1,
+                        0)
+sum(DF$GE_allYears)
+
+#Create new dataframe for export, select only new variables and the greenspace variables
+figDF = DF[, c('cluster_id','GType90_00','GType00_10','pctC_prkG90_00','pctC_vacG90_00','pctC_othG90_00',
+               'pctC_prkG00_10','pctC_vacG00_10','pctC_othG00_10')]
+
+#Rename to shorten column names
+oldnames_fig = c('cluster_id','GType90_00','GType00_10','pctC_prkG90_00','pctC_vacG90_00','pctC_othG90_00','pctC_prkG00_10','pctC_vacG00_10','pctC_othG00_10')
+newnames_fig = c('cluster_id','GType90_00','GType00_10','pCprk90_00','pCvac90_00','pCoth90_00','pCprk00_10','pCvac00_10','pCoth00_10')
+
+figDF = figDF %>% rename_at(vars(oldnames_fig), ~ newnames_fig)
+
+#Descriptive stats for results section
+sum(figDF$pCoth90_00 > 0.01) #293
+sum(figDF$pCoth90_00 < -0.01) #171
+#293+171/784 = 59.2%
+
+sum(figDF$pCoth00_10 > 0.01) #84
+sum(figDF$pCoth00_10 < -0.01) #407
+#84+407/784 = 62.6%
+
 # #Increase in first period, decrease in second period, increase in third period
 # sum(figDF$pCinf90_00 > 0.01 & figDF$pCinf00_10 < -0.01 & figDF$pCinf10_15 > 0.01)
 # 
 # #Decrease in first period, increase in second period, decrease in third period
 # sum(figDF$pCinf90_00 < -0.01 & figDF$pCinf00_10 > 0.01 & figDF$pCinf10_15 < -0.01)
 # 
-# sum(figDF$pCfrm90_00 > 0.01)
-# sum(figDF$pCfrm90_00 < -0.01)
-# 
-# sum(figDF$pCfrm00_10 > 0.01)
-# sum(figDF$pCfrm00_10 < -0.01)
-# 
-# sum(figDF$pCfrm10_15 > 0.01)
-# sum(figDF$pCfrm10_15 < -0.01)
-# 
-# #Saw change in all three periods
-# sum((figDF$pCfrm90_00 > 0.01 | figDF$pCfrm90_00 < -0.01) & (figDF$pCfrm00_10 > 0.01 | figDF$pCfrm00_10 < -0.01) & (figDF$pCfrm10_15 > 0.01 | figDF$pCfrm10_15 < -0.01))
-# 
-# #Export DF to make figures for paper
-# #write.csv(figDF, 'C:/Users/mstuhlm1/Dropbox/Envt Gentrification/Data/Combined/DF4Figures_v6_80th.csv')
+sum(figDF$pCprk90_00 > 0.01) #24
+sum(figDF$pCprk90_00 < -0.01) #89
+#24+89/784 = 14.4%
+
+sum(figDF$pCprk00_10 > 0.01) #161
+sum(figDF$pCprk00_10 < -0.01) #17
+#161+17/784 = 22.7%
+
+#Saw change in both periods
+sum((figDF$pCprk90_00 > 0.01 | figDF$pCprk90_00 < -0.01) & (figDF$pCprk00_10 > 0.01 | figDF$pCprk00_10 < -0.01)) #79
+#Denominator = saw any change
+sum(figDF$pCprk90_00 > 0.01 | figDF$pCprk90_00 < -0.01 | figDF$pCprk00_10 > 0.01 | figDF$pCprk00_10 < -0.01) #212
+#79/212 = 37.3%
+
+#Export DF to make figures for paper
+write.csv(figDF, 'C:/Users/mstuhlm1/Dropbox/Envt Gentrification/Data/Combined/DF4Figures_v6_80th_RR.csv')
 
 # STEP 9 -----------------------------------------------
 #Run logit regression
