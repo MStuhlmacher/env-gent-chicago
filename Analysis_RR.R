@@ -1004,13 +1004,13 @@ newnames_fig = c('cluster_id','GType90_00','GType00_10','pCprk90_00','pCvac90_00
 
 figDF = figDF %>% rename_at(vars(oldnames_fig), ~ newnames_fig)
 
-#Descriptive stats for results section
-sum(figDF$pCoth90_00 > 0.01) #293
-sum(figDF$pCoth90_00 < -0.01) #171
+#Descriptive stats for table in results section
+sum(figDF$pCoth90_00 > 0.01) #293/784 = 37.4%
+sum(figDF$pCoth90_00 < -0.01) #171/784 = 21.8%
 #293+171/784 = 59.2%
 
-sum(figDF$pCoth00_10 > 0.01) #84
-sum(figDF$pCoth00_10 < -0.01) #407
+sum(figDF$pCoth00_10 > 0.01) #84/784 = 10.7%
+sum(figDF$pCoth00_10 < -0.01) #407/784 = 51.9%
 #84+407/784 = 62.6%
 
 # #Increase in first period, decrease in second period, increase in third period
@@ -1019,12 +1019,12 @@ sum(figDF$pCoth00_10 < -0.01) #407
 # #Decrease in first period, increase in second period, decrease in third period
 # sum(figDF$pCinf90_00 < -0.01 & figDF$pCinf00_10 > 0.01 & figDF$pCinf10_15 < -0.01)
 # 
-sum(figDF$pCprk90_00 > 0.01) #24
-sum(figDF$pCprk90_00 < -0.01) #89
+sum(figDF$pCprk90_00 > 0.01) #24/784 = 3.1%
+sum(figDF$pCprk90_00 < -0.01) #89/784 = 11.4%
 #24+89/784 = 14.4%
 
-sum(figDF$pCprk00_10 > 0.01) #161
-sum(figDF$pCprk00_10 < -0.01) #17
+sum(figDF$pCprk00_10 > 0.01) #161/784 = 20.5%
+sum(figDF$pCprk00_10 < -0.01) #17/784 = 2.2%
 #161+17/784 = 22.7%
 
 #Saw change in both periods
@@ -1051,8 +1051,9 @@ options(scipen = 999)
 #----1990-2000 GE only: GE, gentrified----
 #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #Remove area of census tract, add in amount of each type of greenspace in 1990
-model90_00_GE = glm(gent90_00 ~ BpctC_prkG90_00 + BpctC_vacG90_00 + BpctC_othG90_00 + dwntwnM + trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pplSqM90_00 +
-                      B_pct30H90_00 + pA_prkG90 + pA_vacG90 + pA_othG90, family = "binomial", data = DF_GE90)
+#USED IN APPENDIX
+model90_00_GE = glm(gent90_00 ~ BpctC_prkG90_00 + BpctC_vacG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_vacG90 + pA_othG90 + dwntwnM +
+                      trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00, family = "binomial", data = DF_GE90)
 
 summary(model90_00_GE)
 OddsRatio(model90_00_GE)
@@ -1069,32 +1070,33 @@ varImp(model90_00_GE)
 vif(model90_00_GE) #need VIF values to be below 5
 
 #----1990-2000 GE only: GE, gentrified (with race)----
-#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-model90_00GE_R = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_vacG90_00 + BpctC_othG90_00 + dwntwnM + trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pplSqM90_00 +
-                       B_pct30H90_00 + pA_prkG90 + pA_vacG90 + pA_othG90, family = "binomial", data = DF_GE90)
-
-summary(model90_00GE_R)
-OddsRatio(model90_00GE_R) #glm.fit: fitted probabilities numerically 0 or 1 occurred
-
-model90_00GE_R_nb = glm(gentSDR90_00 ~ pctC_prkG90_00 + pctC_vacG90_00 + pctC_othG90_00 + dwntwnM + trnstDistM + pctC_pctV90_00 + pctC_pctHUD90_00 + pctC_pplSqM90_00 +
-                          pctC_pct30H90_00, family = "binomial", data = DF_GE90)
-
-summary(model90_00GE_R_nb)
-OddsRatio(model90_00GE_R_nb) #don't get the fit error with all non-binary variables and the percent area of vacant removed
-
-#Calculate McFadden R2
-PseudoR2(model90_00GE_R,c("McFadden","McFaddenAdj"))
-
-#Determine variable importance
-varImp(model90_00GE_R)
-
-#Check for multicollinearity
-vif(model90_00GE_R) #need VIF values to be below 5
+# #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
+# model90_00GE_R = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_vacG90_00 + BpctC_othG90_00 + dwntwnM + trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pplSqM90_00 +
+#                        B_pct30H90_00 + pA_prkG90 + pA_vacG90 + pA_othG90, family = "binomial", data = DF_GE90)
+# 
+# summary(model90_00GE_R)
+# OddsRatio(model90_00GE_R) #glm.fit: fitted probabilities numerically 0 or 1 occurred
+# 
+# model90_00GE_R_nb = glm(gentSDR90_00 ~ pctC_prkG90_00 + pctC_vacG90_00 + pctC_othG90_00 + dwntwnM + trnstDistM + pctC_pctV90_00 + pctC_pctHUD90_00 + pctC_pplSqM90_00 +
+#                           pctC_pct30H90_00, family = "binomial", data = DF_GE90)
+# 
+# summary(model90_00GE_R_nb)
+# OddsRatio(model90_00GE_R_nb) #don't get the fit error with all non-binary variables and the percent area of vacant removed
+# 
+# #Calculate McFadden R2
+# PseudoR2(model90_00GE_R,c("McFadden","McFaddenAdj"))
+# 
+# #Determine variable importance
+# varImp(model90_00GE_R)
+# 
+# #Check for multicollinearity
+# vif(model90_00GE_R) #need VIF values to be below 5
 
 #----2000-2010 GE only: GE, gentrified----
 #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-model00_10_GE = glm(gent00_10 ~ BpctC_prkG00_10 + BpctC_vacG00_10 + BpctC_othG00_10 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pplSqM00_10 +
-                      B_pct30H00_10 + pA_prkG00 + pA_vacG00 + pA_othG00, family = "binomial", data = DF_GE00)
+#USED IN APPENDIX
+model00_10_GE = glm(gent00_10 ~ BpctC_prkG00_10 + BpctC_vacG00_10 + BpctC_othG00_10 + pA_prkG00 + pA_vacG00 + pA_othG00 + dwntwnM + 
+                      trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10, family = "binomial", data = DF_GE00)
 
 summary(model00_10_GE)
 OddsRatio(model00_10_GE)
@@ -1109,80 +1111,81 @@ varImp(model00_10_GE)
 vif(model00_10_GE)
 
 #----2000-2010 GE only: GE, gentrified (with race)----
-#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-model00_10_GE_R = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_vacG00_10 + BpctC_othG00_10 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pplSqM00_10 +
-                        B_pct30H00_10 + pA_prkG00 + pA_vacG00 + pA_othG00, family = "binomial", data = DF_GE00)
-
-summary(model00_10_GE_R)
-OddsRatio(model00_10_GE_R)
-
-#Calculate McFadden R2
-PseudoR2(model00_10_GE_R,c("McFadden","McFaddenAdj"))
-
-#Determine variable importance
-varImp(model00_10_GE_R)
-
-#Check for multicollinearity
-vif(model00_10_GE_R)
+# #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
+# model00_10_GE_R = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_vacG00_10 + BpctC_othG00_10 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pplSqM00_10 +
+#                         B_pct30H00_10 + pA_prkG00 + pA_vacG00 + pA_othG00, family = "binomial", data = DF_GE00)
+# 
+# summary(model00_10_GE_R)
+# OddsRatio(model00_10_GE_R)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model00_10_GE_R,c("McFadden","McFaddenAdj"))
+# 
+# #Determine variable importance
+# varImp(model00_10_GE_R)
+# 
+# #Check for multicollinearity
+# vif(model00_10_GE_R)
 
 #----2010-2015 GE only: GE, gentrified----
-#2010-2015 Change Model with binary greenspace, % change variables replaced with binary increase
-model10_15_GE = glm(gent10_15 ~ BpctC_prkG10_15 + BpctC_vacG10_15 + BpctC_othG10_15 + dwntwnM + trnstDistM + B_pctV10_15 + B_pctHUD10_15 + B_pplSqM10_15 +
-                      B_pct30H10_15 + pA_prkG10 + pA_vacG10 + pA_othG10, family = "binomial", data = DF_GE10)
-summary(model10_15_GE)
-OddsRatio(model10_15_GE)
-
-#Calculate McFadden R2
-PseudoR2(model10_15_GE,c("McFadden","McFaddenAdj"))
-
-#Determine variable importance
-varImp(model10_15_GE)
-
-#Check for multicollinearity
-vif(model10_15_GE)
+# #2010-2015 Change Model with binary greenspace, % change variables replaced with binary increase
+# model10_15_GE = glm(gent10_15 ~ BpctC_prkG10_15 + BpctC_vacG10_15 + BpctC_othG10_15 + dwntwnM + trnstDistM + B_pctV10_15 + B_pctHUD10_15 + B_pplSqM10_15 +
+#                       B_pct30H10_15 + pA_prkG10 + pA_vacG10 + pA_othG10, family = "binomial", data = DF_GE10)
+# summary(model10_15_GE)
+# OddsRatio(model10_15_GE)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model10_15_GE,c("McFadden","McFaddenAdj"))
+# 
+# #Determine variable importance
+# varImp(model10_15_GE)
+# 
+# #Check for multicollinearity
+# vif(model10_15_GE)
 
 #----2010-2015 GE only: GE, gentrified (with race)----
-#2010-2015 Change Model with binary greenspace, % change variables replaced with binary increase
-model10_15_GE_R = glm(gentSDR10_15 ~ BpctC_prkG10_15 + BpctC_vacG10_15 + BpctC_othG10_15 + dwntwnM + trnstDistM + B_pctV10_15 + B_pctHUD10_15 + B_pplSqM10_15 +
-                        B_pct30H10_15 + pA_prkG10 + pA_vacG10 + pA_othG10, family = "binomial", data = DF_GE10)
-summary(model10_15_GE_R)
-OddsRatio(model10_15_GE_R)
-
-#Calculate McFadden R2
-PseudoR2(model10_15_GE_R,c("McFadden","McFaddenAdj"))
-
-#Determine variable importance
-varImp(model10_15_GE_R)
-
-#Check for multicollinearity
-vif(model10_15_GE_R)
+# #2010-2015 Change Model with binary greenspace, % change variables replaced with binary increase
+# model10_15_GE_R = glm(gentSDR10_15 ~ BpctC_prkG10_15 + BpctC_vacG10_15 + BpctC_othG10_15 + dwntwnM + trnstDistM + B_pctV10_15 + B_pctHUD10_15 + B_pplSqM10_15 +
+#                         B_pct30H10_15 + pA_prkG10 + pA_vacG10 + pA_othG10, family = "binomial", data = DF_GE10)
+# summary(model10_15_GE_R)
+# OddsRatio(model10_15_GE_R)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model10_15_GE_R,c("McFadden","McFaddenAdj"))
+# 
+# #Determine variable importance
+# varImp(model10_15_GE_R)
+# 
+# #Check for multicollinearity
+# vif(model10_15_GE_R)
 
 # REMOVING VACANT FROM THE MODEL -----------------------
 
 #----1990-2000 GE only: GE, gentrified, no vacant----
-#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-#Remove area of census tract, add in amount of each type of greenspace in 1990
-model90_00_GE_nv = glm(gent90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + dwntwnM + trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pplSqM90_00 +
-                      B_pct30H90_00 + pA_prkG90 + pA_othG90, family = "binomial", data = DF_GE90)
-
-summary(model90_00_GE_nv)
-OddsRatio(model90_00_GE_nv)
-
-#Calculate McFadden R2
-PseudoR2(model90_00_GE_nv,c("McFadden","McFaddenAdj"))
-#In a footnote, McFadden (1977, p.35) wrote that "values of .2 to .4 [...] represent an excellent fit."
-#The paper is available online: http://cowles.yale.edu/sites/default/files/files/pub/d04/d0474.pdf
-
-#Determine variable importance
-varImp(model90_00_GE_nv)
-
-#Check for multicollinearity
-vif(model90_00_GE_nv) #need VIF values to be below 5
+# #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
+# #Remove area of census tract, add in amount of each type of greenspace in 1990
+# model90_00_GE_nv = glm(gent90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + dwntwnM + trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pplSqM90_00 +
+#                       B_pct30H90_00 + pA_prkG90 + pA_othG90, family = "binomial", data = DF_GE90)
+# 
+# summary(model90_00_GE_nv)
+# OddsRatio(model90_00_GE_nv)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model90_00_GE_nv,c("McFadden","McFaddenAdj"))
+# #In a footnote, McFadden (1977, p.35) wrote that "values of .2 to .4 [...] represent an excellent fit."
+# #The paper is available online: http://cowles.yale.edu/sites/default/files/files/pub/d04/d0474.pdf
+# 
+# #Determine variable importance
+# varImp(model90_00_GE_nv)
+# 
+# #Check for multicollinearity
+# vif(model90_00_GE_nv) #need VIF values to be below 5
 
 #----1990-2000 GE only: GE, gentrified (with race), no vacant----
-#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-model90_00GE_R_nv = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + dwntwnM + trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pplSqM90_00 +
-                       B_pct30H90_00 + pA_prkG90 + pA_othG90, family = "binomial", data = DF_GE90)
+#1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
+#USED IN ARTICLE TEXT
+model90_00GE_R_nv = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
+                          trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv)
 OddsRatio(model90_00GE_R_nv)
@@ -1197,26 +1200,26 @@ varImp(model90_00GE_R_nv)
 vif(model90_00GE_R_nv) #need VIF values to be below 5
 
 #----2000-2010 GE only: GE, gentrified, no vacant----
-#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-model00_10_GE_nv = glm(gent00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pplSqM00_10 +
-                      B_pct30H00_10 + pA_prkG00 + pA_othG00, family = "binomial", data = DF_GE00)
-
-summary(model00_10_GE_nv)
-OddsRatio(model00_10_GE_nv)
-
-#Calculate McFadden R2
-PseudoR2(model00_10_GE_nv,c("McFadden","McFaddenAdj"))
-
-#Determine variable importance
-varImp(model00_10_GE_nv)
-
-#Check for multicollinearity
-vif(model00_10_GE_nv)
+# #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
+# model00_10_GE_nv = glm(gent00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pplSqM00_10 +
+#                       B_pct30H00_10 + pA_prkG00 + pA_othG00, family = "binomial", data = DF_GE00)
+# 
+# summary(model00_10_GE_nv)
+# OddsRatio(model00_10_GE_nv)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model00_10_GE_nv,c("McFadden","McFaddenAdj"))
+# 
+# #Determine variable importance
+# varImp(model00_10_GE_nv)
+# 
+# #Check for multicollinearity
+# vif(model00_10_GE_nv)
 
 #----2000-2010 GE only: GE, gentrified (with race), no vacant----
 #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-model00_10_GE_R_nv = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pplSqM00_10 +
-                        B_pct30H00_10 + pA_prkG00 + pA_othG00, family = "binomial", data = DF_GE00)
+#USED IN ARTICLE TEXT
+model00_10_GE_R_nv = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10, family = "binomial", data = DF_GE00)
 
 summary(model00_10_GE_R_nv)
 OddsRatio(model00_10_GE_R_nv)
@@ -1231,36 +1234,36 @@ varImp(model00_10_GE_R_nv)
 vif(model00_10_GE_R_nv)
 
 #----2010-2015 GE only: GE, gentrified, no vacant----
-#2010-2015 Change Model with binary greenspace, % change variables replaced with binary increase
-model10_15_GE_nv = glm(gent10_15 ~ BpctC_prkG10_15 + BpctC_othG10_15 + dwntwnM + trnstDistM + B_pctV10_15 + B_pctHUD10_15 + B_pplSqM10_15 +
-                      B_pct30H10_15 + pA_prkG10 + pA_othG10, family = "binomial", data = DF_GE10)
-summary(model10_15_GE_nv)
-OddsRatio(model10_15_GE_nv)
-
-#Calculate McFadden R2
-PseudoR2(model10_15_GE_nv,c("McFadden","McFaddenAdj"))
-
-#Determine variable importance
-varImp(model10_15_GE_nv)
-
-#Check for multicollinearity
-vif(model10_15_GE_nv)
+# #2010-2015 Change Model with binary greenspace, % change variables replaced with binary increase
+# model10_15_GE_nv = glm(gent10_15 ~ BpctC_prkG10_15 + BpctC_othG10_15 + dwntwnM + trnstDistM + B_pctV10_15 + B_pctHUD10_15 + B_pplSqM10_15 +
+#                       B_pct30H10_15 + pA_prkG10 + pA_othG10, family = "binomial", data = DF_GE10)
+# summary(model10_15_GE_nv)
+# OddsRatio(model10_15_GE_nv)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model10_15_GE_nv,c("McFadden","McFaddenAdj"))
+# 
+# #Determine variable importance
+# varImp(model10_15_GE_nv)
+# 
+# #Check for multicollinearity
+# vif(model10_15_GE_nv)
 
 #----2010-2015 GE only: GE, gentrified (with race), no vacant----
-#2010-2015 Change Model with binary greenspace, % change variables replaced with binary increase
-model10_15_GE_R_nv = glm(gentSDR10_15 ~ BpctC_prkG10_15 + BpctC_othG10_15 + dwntwnM + trnstDistM + B_pctV10_15 + B_pctHUD10_15 + B_pplSqM10_15 +
-                        B_pct30H10_15 + pA_prkG10 + pA_othG10, family = "binomial", data = DF_GE10)
-summary(model10_15_GE_R_nv)
-OddsRatio(model10_15_GE_R_nv)
-
-#Calculate McFadden R2
-PseudoR2(model10_15_GE_R_nv,c("McFadden","McFaddenAdj"))
-
-#Determine variable importance
-varImp(model10_15_GE_R_nv)
-
-#Check for multicollinearity
-vif(model10_15_GE_R_nv)
+# #2010-2015 Change Model with binary greenspace, % change variables replaced with binary increase
+# model10_15_GE_R_nv = glm(gentSDR10_15 ~ BpctC_prkG10_15 + BpctC_othG10_15 + dwntwnM + trnstDistM + B_pctV10_15 + B_pctHUD10_15 + B_pplSqM10_15 +
+#                         B_pct30H10_15 + pA_prkG10 + pA_othG10, family = "binomial", data = DF_GE10)
+# summary(model10_15_GE_R_nv)
+# OddsRatio(model10_15_GE_R_nv)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model10_15_GE_R_nv,c("McFadden","McFaddenAdj"))
+# 
+# #Determine variable importance
+# varImp(model10_15_GE_R_nv)
+# 
+# #Check for multicollinearity
+# vif(model10_15_GE_R_nv)
 
 # STEP 10 -----------------------------------------------
 #Check if the residuals are spatially correlated
