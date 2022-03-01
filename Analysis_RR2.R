@@ -970,6 +970,24 @@ DF$B_pct30H10_15 = as.integer(DF$B_pct30H10_15)
 DF[c('pct_hud90','pct_hud00','pct_hud10','pctC_pctHUD90_00','pctC_pctHUD00_10',
      'pctC_pctHUD10_15')][is.na(DF[c('pct_hud90','pct_hud00','pct_hud10','pctC_pctHUD90_00','pctC_pctHUD00_10','pctC_pctHUD10_15')])] = 0
 
+#Add in whether or not the census tracts had neighbors that were gentrified (or GE?)
+#read in 'DF4JiEun_v6_80th_wNeigh'
+neigh = read.csv('C:/Users/mstuhlm1/Dropbox/Envt Gentrification/Data/Combined/DF4JiEun_v6_80th_wNeigh.csv')
+
+#remove all columns but ID and neighbors
+neigh_col = c("clstr_d","countNeigh","countNeighGE90_00","countNeighGE00_10","countNeighGent90_00","countNeighGent00_10")
+neigh = subset(neigh, select = neigh_col)
+
+#join with DF
+DF = merge(x=DF,y=neigh,by.x="cluster_id",by.y = "clstr_d",all=TRUE)
+
+#make a binary variable (0=no gentrifying neighbor, 1 = at least 1 gentrifying neighbor)
+DF$B_NeighGent90_00 = DF$countNeighGent90_00 > 0
+DF$B_NeighGent90_00 = as.integer(DF$B_NeighGent90_00)
+
+DF$B_NeighGent00_10 = DF$countNeighGent00_10 > 0
+DF$B_NeighGent00_10 = as.integer(DF$B_NeighGent00_10)
+
 # STEP 8A -----------------------------------------------
 #Set up data for exporting to make figures
 
@@ -1034,7 +1052,7 @@ sum(figDF$pCprk90_00 > 0.01 | figDF$pCprk90_00 < -0.01 | figDF$pCprk00_10 > 0.01
 #79/212 = 37.3%
 
 #Export DF to make figures for paper
-write.csv(figDF, 'C:/Users/mstuhlm1/Dropbox/Envt Gentrification/Data/Combined/DF4Figures_v6_80th_RR.csv')
+#write.csv(figDF, 'C:/Users/mstuhlm1/Dropbox/Envt Gentrification/Data/Combined/DF4Figures_v6_80th_RR.csv')
 
 # STEP 9 -----------------------------------------------
 #Run logit regression
@@ -1108,8 +1126,25 @@ varImp(model90_00GE_R_nv)
 #Check for multicollinearity
 vif(model90_00GE_R_nv) #need VIF values to be below 5
 
+#1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
+#Gentrifying neighbor added:
+model90_00GE_R_nv_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
+                          trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+
+summary(model90_00GE_R_nv_neigh)
+OddsRatio(model90_00GE_R_nv_neigh)
+
+#Calculate McFadden R2
+PseudoR2(model90_00GE_R_nv_neigh,c("McFadden","McFaddenAdj"))
+
+#Determine variable importance
+varImp(model90_00GE_R_nv_neigh)
+
+#Check for multicollinearity
+vif(model90_00GE_R_nv_neigh) #need VIF values to be below 5
+
 #----2000-2010 GE only: GE, gentrified (with race), no vacant----
-#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
+#2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #USED IN ARTICLE TEXT (RR1)
 model00_10_GE_R_nv = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10, family = "binomial", data = DF_GE00)
 
@@ -1124,6 +1159,23 @@ varImp(model00_10_GE_R_nv)
 
 #Check for multicollinearity
 vif(model00_10_GE_R_nv)
+
+#2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
+#Gentrifying neighbors added
+model00_10_GE_R_nv_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM +
+                           trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
+
+summary(model00_10_GE_R_nv_neigh)
+OddsRatio(model00_10_GE_R_nv_neigh)
+
+#Calculate McFadden R2
+PseudoR2(model00_10_GE_R_nv_neigh,c("McFadden","McFaddenAdj"))
+
+#Determine variable importance
+varImp(model00_10_GE_R_nv_neigh)
+
+#Check for multicollinearity
+vif(model00_10_GE_R_nv_neigh)
 
 # STEP 10 -----------------------------------------------
 #Check if the residuals are spatially correlated
