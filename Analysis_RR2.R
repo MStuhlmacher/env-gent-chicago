@@ -34,7 +34,6 @@ library(caret)
 library(car)
 library(DescTools)
 library(rgeos)
-library(tmap)
 
 #Set working directory
 setwd("C:/Users/mstuhlm1/OneDrive - DePaul University/Research/EnvGentrification/Data") #work laptop
@@ -48,7 +47,9 @@ g2010_80th = read.csv('./Greenspace/LU2010_NDVI80thPer_L5_20210524.csv')
 g2015_80th = read.csv('./Greenspace/LU2015_NDVI80thPer_L8_20210524.csv')
 
 #Downtown polygon
-DwnTwn = shapefile('C:/Users/mstuhlm1/Dropbox/Envt Gentrification/Data/ChicagoBoundaries/DowntownPoly.shp')
+#DwnTwn = shapefile('C:/Users/mstuhlm1/Dropbox/Envt Gentrification/Data/ChicagoBoundaries/DowntownPoly.shp')
+#Drive for lab computer:
+DwnTwn = shapefile('./ChicagoBoundaries/DowntownPoly.shp')
 
 #Transit
 cta = st_read('./Transit/CTA_RailStations/CTA_RailStations.shp')
