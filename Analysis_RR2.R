@@ -34,6 +34,7 @@ library(caret)
 library(car)
 library(DescTools)
 library(rgeos)
+library(tmap)
 
 #Set working directory
 setwd("C:/Users/mstuhlm1/OneDrive - DePaul University/Research/EnvGentrification/Data") #work laptop
@@ -98,6 +99,14 @@ MT_1990 = subset(MT, YEAR == "1990")
 MT_2000 = subset(MT, YEAR == "2000")
 MT_2010 = subset(MT, YEAR == "2006-2010")
 MT_2015 = subset(MT, YEAR == "2011-2015")
+
+#plot population density
+qtm(MT_1990, fill = "ppl_sqm")
+
+
+
+ggplot(MT_1990, aes(x=long, y=lat, group = MT_1990@data$cluster_id, fill = MT_1990@data$ppl_sqm))+
+  geom_polygon()
 
 #Adjust for inflation (make rent and income comparable through time)
 #Census Metadata:
@@ -1109,7 +1118,7 @@ vif(model00_10_GE)
 # REMOVING VACANT FROM THE MODEL -----------------------
 
 #----1990-2000 GE only: GE, gentrified (with race), no vacant----
-#1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
+# (1) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
 #USED IN ARTICLE TEXT (RR1)
 model90_00GE_R_nv = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
                           trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00, family = "binomial", data = DF_GE90)
@@ -1126,10 +1135,10 @@ varImp(model90_00GE_R_nv)
 #Check for multicollinearity
 vif(model90_00GE_R_nv) #need VIF values to be below 5
 
-#1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
+# (2) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
 #Gentrifying neighbor added:
 model90_00GE_R_nv_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
-                          trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+                                trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv_neigh)
 OddsRatio(model90_00GE_R_nv_neigh)
@@ -1143,8 +1152,42 @@ varImp(model90_00GE_R_nv_neigh)
 #Check for multicollinearity
 vif(model90_00GE_R_nv_neigh) #need VIF values to be below 5
 
+# (3) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
+#Sensitivity Analysis with baseline values (use first year of period) instead of percent increase
+model90_00GE_R_nv_sa = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
+                          trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90, family = "binomial", data = DF_GE90)
+
+summary(model90_00GE_R_nv_sa)
+OddsRatio(model90_00GE_R_nv_sa)
+
+#Calculate McFadden R2
+PseudoR2(model90_00GE_R_nv_sa,c("McFadden","McFaddenAdj"))
+
+#Determine variable importance
+varImp(model90_00GE_R_nv_sa)
+
+#Check for multicollinearity
+vif(model90_00GE_R_nv_sa) #need VIF values to be below 5
+
+# (4) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
+#Sensitivity Analysis with baseline values (use first year of period) instead of percent increase and gentrifying neighbor
+model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
+                             trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+
+summary(model90_00GE_R_nv_sa_neigh)
+OddsRatio(model90_00GE_R_nv_sa_neigh)
+
+#Calculate McFadden R2
+PseudoR2(model90_00GE_R_nv_sa_neigh,c("McFadden","McFaddenAdj"))
+
+#Determine variable importance
+varImp(model90_00GE_R_nv_sa_neigh)
+
+#Check for multicollinearity
+vif(model90_00GE_R_nv_sa_neigh) #need VIF values to be below 5
+
 #----2000-2010 GE only: GE, gentrified (with race), no vacant----
-#2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
+# (1) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #USED IN ARTICLE TEXT (RR1)
 model00_10_GE_R_nv = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10, family = "binomial", data = DF_GE00)
 
@@ -1160,7 +1203,7 @@ varImp(model00_10_GE_R_nv)
 #Check for multicollinearity
 vif(model00_10_GE_R_nv)
 
-#2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
+# (2) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #Gentrifying neighbors added
 model00_10_GE_R_nv_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM +
                            trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
@@ -1176,6 +1219,40 @@ varImp(model00_10_GE_R_nv_neigh)
 
 #Check for multicollinearity
 vif(model00_10_GE_R_nv_neigh)
+
+# (3) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
+#Sensitivity Analysis with baseline values (use first year of period) instead of percent increase
+model00_10_GE_R_nv_sa = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM +
+                              pct_v00 + pct_hud00 + pct_h30_00 + ppl_sqm00, family = "binomial", data = DF_GE00)
+
+summary(model00_10_GE_R_nv_sa)
+OddsRatio(model00_10_GE_R_nv_sa)
+
+#Calculate McFadden R2
+PseudoR2(model00_10_GE_R_nv_sa,c("McFadden","McFaddenAdj"))
+
+#Determine variable importance
+varImp(model00_10_GE_R_nv_sa)
+
+#Check for multicollinearity
+vif(model00_10_GE_R_nv_sa)
+
+# (4) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
+#Sensitivity Analysis with baseline values (use first year of period) instead of percent increase and gentrifying neighbors
+model00_10_GE_R_nv_sa_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM +
+                              pct_v00 + pct_hud00 + pct_h30_00 + ppl_sqm00 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
+
+summary(model00_10_GE_R_nv_sa_neigh)
+OddsRatio(model00_10_GE_R_nv_sa_neigh)
+
+#Calculate McFadden R2
+PseudoR2(model00_10_GE_R_nv_sa_neigh,c("McFadden","McFaddenAdj"))
+
+#Determine variable importance
+varImp(model00_10_GE_R_nv_sa_neigh)
+
+#Check for multicollinearity
+vif(model00_10_GE_R_nv_sa_neigh)
 
 # STEP 10 -----------------------------------------------
 #Check if the residuals are spatially correlated
