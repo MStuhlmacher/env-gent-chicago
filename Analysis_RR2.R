@@ -364,25 +364,25 @@ MT_2015_G80th$pctA_othG = MT_2015_G80th$OtherGreenSqM/MT_2015_G80th$areaSqM
 # Add final variables to the megatract 
 
 #Replace NAs with 0s for greenspace and census variables
-MT_1990_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h','pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM',
+MT_1990_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h','pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM',
                      'GreenSqM','pctA_G','pctA_parkG','pctA_vacG','pctA_othG')][is.na(MT_1990_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v',
-                                                                                               'pct_h','pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM',
+                                                                                               'pct_h','pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM',
                                                                                                'pctA_G','pctA_parkG','pctA_vacG','pctA_othG')])] = 0
 
-MT_2000_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h','pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM',
+MT_2000_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h','pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM',
                      'GreenSqM','pctA_G','pctA_parkG','pctA_vacG','pctA_othG')][is.na(MT_2000_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v',
-                                                                                                           'pct_h','pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM',
+                                                                                                           'pct_h','pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM',
                                                                                                            'pctA_G','pctA_parkG','pctA_vacG','pctA_othG')])] = 0
 
 
-MT_2010_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h','pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM',
+MT_2010_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h','pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM',
                      'GreenSqM','pctA_G','pctA_parkG','pctA_vacG','pctA_othG')][is.na(MT_2010_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v',
-                                                                                                           'pct_h','pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM',
+                                                                                                           'pct_h','pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM',
                                                                                                            'pctA_G','pctA_parkG','pctA_vacG','pctA_othG')])] = 0
 
-MT_2015_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h','pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM',
+MT_2015_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h','pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM',
                      'GreenSqM','pctA_G','pctA_parkG','pctA_vacG','pctA_othG')][is.na(MT_2015_G80th@data[c('income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v',
-                                                                                                           'pct_h','pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM',
+                                                                                                           'pct_h','pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM',
                                                                                                            'pctA_G','pctA_parkG','pctA_vacG','pctA_othG')])] = 0
 
 # STEP 4A -----------------------------------------------
@@ -393,7 +393,7 @@ MT_G80th = rbind(MT_1990_G80th@data,MT_2000_G80th@data,MT_2010_G80th@data,MT_201
 
 #Keep only final variables
 keep = c('cluster_id','YEAR','areaSqM','income','income_inf','rent','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h',
-         'pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM','pctA_G','pctA_parkG','pctA_vacG','pctA_othG')
+         'pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','GreenSqM','pctA_G','pctA_parkG','pctA_vacG','pctA_othG')
 MT_G80th = MT_G80th[keep]
 
 #shp
@@ -406,7 +406,7 @@ MT_G80th_SHP = MT_G80th_SHP[keep]
 #(except one by O'Hare)
 
 keep2 = c('cluster_id','income_inf','rent_inf','pct_w','pct_cedu','hous_tot','hmVal_inf','pct_v','pct_h',
-         'pct_h30','pct_b','ppl_sqm','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','pctA_G','pctA_parkG','pctA_vacG','pctA_othG')
+         'pct_h30','pct_b','ppl_sqm','ppl_acre','ParkGreenSqM','VacGreenSqM','OtherGreenSqM','pctA_G','pctA_parkG','pctA_vacG','pctA_othG')
 
 MT_1990_G80th_p = MT_1990_G80th[keep2]
 MT_2000_G80th_p = MT_2000_G80th[keep2]
@@ -415,19 +415,19 @@ MT_2015_G80th_p = MT_2015_G80th[keep2]
 
 #Add year to the end of relevant variable names
 names(MT_1990_G80th_p) = c('cluster_id','income90','rent90','pW90','pCedu90','hous_tot90','hmVal90','pct_v90',
-                           'pct_h90','pct_h30_90','pct_b90','ppl_sqm90','parkGsqM_90','vacGsqM_90','othGsqM_90',
+                           'pct_h90','pct_h30_90','pct_b90','ppl_sqm90','ppl_acre90','parkGsqM_90','vacGsqM_90','othGsqM_90',
                            'pA_G90','pA_prkG90','pA_vacG90','pA_othG90')
 
 names(MT_2000_G80th_p) = c('cluster_id','income00','rent00','pW00','pCedu00','hous_tot00','hmVal00','pct_v00',
-                           'pct_h00','pct_h30_00','pct_b00','ppl_sqm00','parkGsqM_00','vacGsqM_00','othGsqM_00',
+                           'pct_h00','pct_h30_00','pct_b00','ppl_sqm00','ppl_acre00','parkGsqM_00','vacGsqM_00','othGsqM_00',
                            'pA_G00','pA_prkG00','pA_vacG00','pA_othG00')
 
 names(MT_2010_G80th_p) = c('cluster_id','income10','rent10','pW10','pCedu10','hous_tot10','hmVal10','pct_v10',
-                           'pct_h10','pct_h30_10','pct_b10','ppl_sqm10','parkGsqM_10','vacGsqM_10','othGsqM_10',
+                           'pct_h10','pct_h30_10','pct_b10','ppl_sqm10','ppl_acre10','parkGsqM_10','vacGsqM_10','othGsqM_10',
                            'pA_G10','pA_prkG10','pA_vacG10','pA_othG10')
 
 names(MT_2015_G80th_p) = c('cluster_id','income15','rent15','pW15','pCedu15','hous_tot15','hmVal15','pct_v15',
-                           'pct_h15','pct_h30_15','pct_b15','ppl_sqm15','parkGsqM_15','vacGsqM_15','othGsqM_15',
+                           'pct_h15','pct_h30_15','pct_b15','ppl_sqm15','ppl_acre15','parkGsqM_15','vacGsqM_15','othGsqM_15',
                            'pA_G15','pA_prkG15','pA_vacG15','pA_othG15')
 
 #Merge on constant columns
@@ -1084,7 +1084,10 @@ hist(DF_GE00$trnstDistM)
 hist(DF_GE90$ppl_sqm90)
 hist(DF_GE00$ppl_sqm00)
 
-hist(DF_GE90$ppl_acre)
+hist(DF_GE90$ppl_acre90)
+hist(DF_GE00$ppl_acre00)
+
+hist(DF_GE90$pct_h30_90)
 
 #----1990-2000 GE only: GE, gentrified----
 #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
@@ -1165,8 +1168,12 @@ vif(model90_00GE_R_nv_neigh) #need VIF values to be below 5
 
 # (3) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
 #Sensitivity Analysis with baseline values (use first year of period) instead of percent increase
+#with ppl/square meter
+#model90_00GE_R_nv_sa = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
+#                          trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90, family = "binomial", data = DF_GE90)
+#with ppl/acre
 model90_00GE_R_nv_sa = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
-                          trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90, family = "binomial", data = DF_GE90)
+                             trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv_sa)
 OddsRatio(model90_00GE_R_nv_sa)
@@ -1184,6 +1191,9 @@ vif(model90_00GE_R_nv_sa) #need VIF values to be below 5
 #Sensitivity Analysis with baseline values (use first year of period) instead of percent increase and gentrifying neighbor
 model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
                              trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+
+model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
+                                   trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv_sa_neigh)
 OddsRatio(model90_00GE_R_nv_sa_neigh)
