@@ -1090,44 +1090,81 @@ hist(DF_GE00$ppl_acre00)
 hist(DF_GE90$pct_h30_90)
 
 #----1990-2000 GE only: GE, gentrified----
-#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-#Remove area of census tract, add in amount of each type of greenspace in 1990
-#USED IN APPENDIX (RR1)
-model90_00_GE = glm(gent90_00 ~ BpctC_prkG90_00 + BpctC_vacG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_vacG90 + pA_othG90 + dwntwnM +
-                      trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00, family = "binomial", data = DF_GE90)
+# #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
+# #Remove area of census tract, add in amount of each type of greenspace in 1990
+# #USED IN APPENDIX (RR1)
+# model90_00_GE = glm(gent90_00 ~ BpctC_prkG90_00 + BpctC_vacG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_vacG90 + pA_othG90 + dwntwnM +
+#                       trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00, family = "binomial", data = DF_GE90)
+# 
+# summary(model90_00_GE)
+# OddsRatio(model90_00_GE)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model90_00_GE,c("McFadden","McFaddenAdj"))
+# #In a footnote, McFadden (1977, p.35) wrote that "values of .2 to .4 [...] represent an excellent fit."
+# #The paper is available online: http://cowles.yale.edu/sites/default/files/files/pub/d04/d0474.pdf
+# 
+# #Determine variable importance
+# varImp(model90_00_GE)
+# 
+# #Check for multicollinearity
+# vif(model90_00_GE) #need VIF values to be below 5
 
-summary(model90_00_GE)
-OddsRatio(model90_00_GE)
+#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
+#Sensitivity Analysis with baseline values (use first year of period) instead of percent increase and gentrifying neighbor
+#USED IN APPENDIX (RR2)
+model90_00_GE_sa_neigh = glm(gent90_00 ~ BpctC_prkG90_00 + BpctC_vacG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_vacG90 + pA_othG90 + dwntwnM +
+                      trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+
+summary(model90_00_GE_sa_neigh)
+OddsRatio(model90_00_GE_sa_neigh)
 
 #Calculate McFadden R2
-PseudoR2(model90_00_GE,c("McFadden","McFaddenAdj"))
+PseudoR2(model90_00_GE_sa_neigh,c("McFadden","McFaddenAdj"))
 #In a footnote, McFadden (1977, p.35) wrote that "values of .2 to .4 [...] represent an excellent fit."
 #The paper is available online: http://cowles.yale.edu/sites/default/files/files/pub/d04/d0474.pdf
 
 #Determine variable importance
-varImp(model90_00_GE)
+varImp(model90_00_GE_sa_neigh)
 
 #Check for multicollinearity
-vif(model90_00_GE) #need VIF values to be below 5
-
+vif(model90_00_GE_sa_neigh) #need VIF values to be below 5
 
 #----2000-2010 GE only: GE, gentrified----
-#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
-#USED IN APPENDIX (RR1)
-model00_10_GE = glm(gent00_10 ~ BpctC_prkG00_10 + BpctC_vacG00_10 + BpctC_othG00_10 + pA_prkG00 + pA_vacG00 + pA_othG00 + dwntwnM + 
-                      trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10, family = "binomial", data = DF_GE00)
+# #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
+# #USED IN APPENDIX (RR1)
+# model00_10_GE = glm(gent00_10 ~ BpctC_prkG00_10 + BpctC_vacG00_10 + BpctC_othG00_10 + pA_prkG00 + pA_vacG00 + pA_othG00 + dwntwnM + 
+#                       trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10, family = "binomial", data = DF_GE00)
+# 
+# summary(model00_10_GE)
+# OddsRatio(model00_10_GE)
+# 
+# #Calculate McFadden R2
+# PseudoR2(model00_10_GE,c("McFadden","McFaddenAdj"))
+# 
+# #Determine variable importance
+# varImp(model00_10_GE)
+# 
+# #Check for multicollinearity
+# vif(model00_10_GE)
 
-summary(model00_10_GE)
-OddsRatio(model00_10_GE)
+#1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase.
+#Sensitivity Analysis with baseline values (use first year of period) instead of percent increase and gentrifying neighbor
+#USED IN APPENDIX (RR2)
+model00_10_GE_sa_neigh = glm(gent00_10 ~ BpctC_prkG00_10 + BpctC_vacG00_10 + BpctC_othG00_10 + pA_prkG00 + pA_vacG00 + pA_othG00 + dwntwnM + 
+                      trnstDistM + + pct_v00 + pct_hud00 + pct_h30_00 + ppl_acre00 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
+
+summary(model00_10_GE_sa_neigh)
+OddsRatio(model00_10_GE_sa_neigh)
 
 #Calculate McFadden R2
-PseudoR2(model00_10_GE,c("McFadden","McFaddenAdj"))
+PseudoR2(model00_10_GE_sa_neigh,c("McFadden","McFaddenAdj"))
 
 #Determine variable importance
-varImp(model00_10_GE)
+varImp(model00_10_GE_sa_neigh)
 
 #Check for multicollinearity
-vif(model00_10_GE)
+vif(model00_10_GE_sa_neigh)
 
 # REMOVING VACANT FROM THE MODEL -----------------------
 
@@ -1168,6 +1205,8 @@ vif(model90_00GE_R_nv_neigh) #need VIF values to be below 5
 
 # (3) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
 #Sensitivity Analysis with baseline values (use first year of period) instead of percent increase
+#PRESENTED IN RR2 RESPONSE TO REVIEWER
+
 #with ppl/square meter
 #model90_00GE_R_nv_sa = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
 #                          trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90, family = "binomial", data = DF_GE90)
@@ -1189,9 +1228,10 @@ vif(model90_00GE_R_nv_sa) #need VIF values to be below 5
 
 # (4) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
 #Sensitivity Analysis with baseline values (use first year of period) instead of percent increase and gentrifying neighbor
-model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
-                             trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
 
+#USED IN ARTICLE TEXT RR2
+#model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
+#                             trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
 model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
                                    trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
 
@@ -1243,8 +1283,10 @@ vif(model00_10_GE_R_nv_neigh)
 
 # (3) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #Sensitivity Analysis with baseline values (use first year of period) instead of percent increase
+#PRESENTED IN RR2 RESPONSE TO REVIEWER
+
 model00_10_GE_R_nv_sa = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM +
-                              pct_v00 + pct_hud00 + pct_h30_00 + ppl_sqm00, family = "binomial", data = DF_GE00)
+                              pct_v00 + pct_hud00 + pct_h30_00 + ppl_acre00, family = "binomial", data = DF_GE00)
 
 summary(model00_10_GE_R_nv_sa)
 OddsRatio(model00_10_GE_R_nv_sa)
@@ -1260,8 +1302,9 @@ vif(model00_10_GE_R_nv_sa)
 
 # (4) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #Sensitivity Analysis with baseline values (use first year of period) instead of percent increase and gentrifying neighbors
+#USED IN ARTICLE TEXT RR2
 model00_10_GE_R_nv_sa_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM +
-                              pct_v00 + pct_hud00 + pct_h30_00 + ppl_sqm00 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
+                              pct_v00 + pct_hud00 + pct_h30_00 + ppl_acre00 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
 
 summary(model00_10_GE_R_nv_sa_neigh)
 OddsRatio(model00_10_GE_R_nv_sa_neigh)
