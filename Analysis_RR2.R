@@ -92,6 +92,9 @@ chicagoSqM = sum(MT@data$areaSqM)
 #Calculate population density (ppl_sqm)
 MT@data$ppl_sqm = MT@data$orgn_tot/MT@data$areaSqM
 
+#Calculate population density (ppl_acre)
+MT@data$ppl_acre = MT@data$orgn_tot/(MT@data$areaSqM/4046.85642)
+
 #Make cluster_id a number
 MT@data$cluster_id = as.numeric(MT@data$cluster_id)
 
@@ -100,14 +103,6 @@ MT_1990 = subset(MT, YEAR == "1990")
 MT_2000 = subset(MT, YEAR == "2000")
 MT_2010 = subset(MT, YEAR == "2006-2010")
 MT_2015 = subset(MT, YEAR == "2011-2015")
-
-#plot population density
-qtm(MT_1990, fill = "ppl_sqm")
-
-
-
-ggplot(MT_1990, aes(x=long, y=lat, group = MT_1990@data$cluster_id, fill = MT_1990@data$ppl_sqm))+
-  geom_polygon()
 
 #Adjust for inflation (make rent and income comparable through time)
 #Census Metadata:
@@ -842,7 +837,7 @@ DF$BpctC_prkG90_00 = as.integer(DF$BpctC_prkG90_00)
 
 #Vacant greenspace
 DF$pctC_vacG90_00 = (DF$pA_vacG00 - DF$pA_vacG90)
-hist(DF$pctC_vacG90_00)
+#hist(DF$pctC_vacG90_00)
 #Binary vacant greenspace
 DF$BpctC_vacG90_00 = DF$pctC_vacG90_00 > 0
 DF$BpctC_vacG90_00 = as.integer(DF$BpctC_vacG90_00)
@@ -1075,6 +1070,21 @@ DF_GE00 = DF[DF$GE00==TRUE,]
 DF_GE10 = DF[DF$GE10==TRUE,]
 
 options(scipen = 999) 
+
+##Create histograms for continuous variables:
+#Distance to downtown
+hist(DF_GE90$dwntwnM)
+hist(DF_GE00$dwntwnM)
+
+#Transit Distance
+hist(DF_GE90$trnstDistM)
+hist(DF_GE00$trnstDistM)
+
+#Population Density
+hist(DF_GE90$ppl_sqm90)
+hist(DF_GE00$ppl_sqm00)
+
+hist(DF_GE90$ppl_acre)
 
 #----1990-2000 GE only: GE, gentrified----
 #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
