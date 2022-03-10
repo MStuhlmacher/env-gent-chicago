@@ -1319,6 +1319,133 @@ varImp(model00_10_GE_R_nv_sa_neigh)
 vif(model00_10_GE_R_nv_sa_neigh)
 
 # STEP 10 -----------------------------------------------
+#Calculate the mean, std, min, max for all variables used in the logit regressions
+
+#1990-2000
+#model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
+#                                   trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+
+summary_GE90_00 = DF_GE90 %>%
+  #group_by(gentSDR90_00) %>%
+  summarise(BpctC_prkG_mean = mean(BpctC_prkG90_00),
+            BpctC_prkG_sd =sd(BpctC_prkG90_00),
+            BpctC_prkG_min = min(BpctC_prkG90_00),
+            BpctC_prkG_max = max(BpctC_prkG90_00),
+            
+            BpctC_othG_mean = mean(BpctC_othG90_00),
+            BpctC_othG_sd = sd(BpctC_othG90_00),
+            BpctC_othG_min = min(BpctC_othG90_00),
+            BpctC_othG_max = max(BpctC_othG90_00),
+            
+            pA_prkG90_mean = mean(pA_prkG90),
+            pA_prkG90_sd = sd(pA_prkG90),
+            pA_prkG90_min = min(pA_prkG90),
+            pA_prkG90_max = max(pA_prkG90),
+            
+            pA_othG90_mean = mean(pA_othG90),
+            pA_othG90_sd = sd(pA_othG90),
+            pA_othG90_min = min(pA_othG90),
+            pA_othG90_max = max(pA_othG90),
+            
+            dwntwnM_mean = mean(dwntwnM),
+            dwntwnM_sd = sd(dwntwnM),
+            dwntwnM_min = min(dwntwnM),
+            dwntwnM_max = max(dwntwnM),
+            
+            trnstDistM_mean = mean(trnstDistM),
+            trnstDistM_sd = sd(trnstDistM),
+            trnstDistM_min = min(trnstDistM),
+            trnstDistM_max = max(trnstDistM),
+            
+            pct_v90_mean = mean(pct_v90),
+            pct_v90_sd = sd(pct_v90),
+            pct_v90_min = min(pct_v90),
+            pct_v90_max = max(pct_v90),
+            
+            pct_hud90_mean = mean(pct_hud90),
+            pct_hud90_sd = sd(pct_hud90),
+            pct_hud90_min = min(pct_hud90),
+            pct_hud90_max = max(pct_hud90),
+            
+            pct_h30_90_mean = mean(pct_h30_90),
+            pct_h30_90_sd = sd(pct_h30_90),
+            pct_h30_90_min = min(pct_h30_90),
+            pct_h30_90_max = max(pct_h30_90),
+            
+            ppl_acre90_mean = mean(ppl_acre90),
+            ppl_acre90_sd = sd(ppl_acre90),
+            ppl_acre90_min = min(ppl_acre90),
+            ppl_acre90_max = max(ppl_acre90),
+            
+            B_NeighGent90_00_mean = mean(B_NeighGent90_00),
+            B_NeighGent90_00_sd = sd(B_NeighGent90_00),
+            B_NeighGent90_00_min = min(B_NeighGent90_00),
+            B_NeighGent90_00_max = max(B_NeighGent90_00)
+            )
+
+#2000-2010
+#model00_10_GE_R_nv_sa_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM +
+#                                    pct_v00 + pct_hud00 + pct_h30_00 + ppl_acre00 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
+
+summary_GE00_10 = DF_GE00 %>%
+  #group_by(gentSDR90_00) %>%
+  summarise(BpctC_prkG_mean = mean(BpctC_prkG00_10),
+            BpctC_prkG_sd =sd(BpctC_prkG00_10),
+            BpctC_prkG_min = min(BpctC_prkG00_10),
+            BpctC_prkG_max = max(BpctC_prkG00_10),
+            
+            BpctC_othG_mean = mean(BpctC_othG00_10),
+            BpctC_othG_sd = sd(BpctC_othG00_10),
+            BpctC_othG_min = min(BpctC_othG00_10),
+            BpctC_othG_max = max(BpctC_othG00_10),
+            
+            pA_prkG_mean = mean(pA_prkG00),
+            pA_prkG_sd = sd(pA_prkG00),
+            pA_prkG_min = min(pA_prkG00),
+            pA_prkG_max = max(pA_prkG00),
+            
+            pA_othG_mean = mean(pA_othG00),
+            pA_othG_sd = sd(pA_othG00),
+            pA_othG_min = min(pA_othG00),
+            pA_othG_max = max(pA_othG00),
+            
+            dwntwnM_mean = mean(dwntwnM),
+            dwntwnM_sd = sd(dwntwnM),
+            dwntwnM_min = min(dwntwnM),
+            dwntwnM_max = max(dwntwnM),
+            
+            trnstDistM_mean = mean(trnstDistM),
+            trnstDistM_sd = sd(trnstDistM),
+            trnstDistM_min = min(trnstDistM),
+            trnstDistM_max = max(trnstDistM),
+            
+            pct_v_mean = mean(pct_v00),
+            pct_v_sd = sd(pct_v00),
+            pct_v_min = min(pct_v00),
+            pct_v_max = max(pct_v00),
+            
+            pct_hud_mean = mean(pct_hud00),
+            pct_hud_sd = sd(pct_hud00),
+            pct_hud_min = min(pct_hud00),
+            pct_hud_max = max(pct_hud00),
+            
+            pct_h30_mean = mean(pct_h30_00),
+            pct_h30_sd = sd(pct_h30_00),
+            pct_h30_min = min(pct_h30_00),
+            pct_h30_max = max(pct_h30_00),
+            
+            ppl_acre_mean = mean(ppl_acre00),
+            ppl_acre_sd = sd(ppl_acre00),
+            ppl_acre_min = min(ppl_acre00),
+            ppl_acre_max = max(ppl_acre00),
+            
+            B_NeighGent_mean = mean(B_NeighGent00_10),
+            B_NeighGent_sd = sd(B_NeighGent00_10),
+            B_NeighGent_min = min(B_NeighGent00_10),
+            B_NeighGent_max = max(B_NeighGent00_10)
+  )
+
+# STEP 11 -----------------------------------------------
 #Check if the residuals are spatially correlated
 #Using https://maczokni.github.io/crimemapping_textbook_bookdown/spatial-regression-models.html as reference
 
