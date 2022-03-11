@@ -782,6 +782,7 @@ distDF[-2] = lapply(distDF[-2], function(x) as.numeric(sub("\\s+\\D+$", "", x)))
 
 #Add to DF
 DFsf$dwntwnM = distDF$dist
+DFsf$dwntwnMiles = (DFsf$dwntwnM/1609.34)
 
 #Visualize to check that it's working:
 #ggplot() + 
@@ -813,6 +814,7 @@ row.names(centroid_sp) = centroid_sp$cluster_id #make the cluster ID the index, 
 
 #Transit is the rows and cluster IDs are the columns
 DFsf$trnstDistM = apply(gDistance(centroid_sp, transit_sp, byid = TRUE), 2, min) #unit is m bc proj is m
+DFsf$trnstDistMiles = (DFsf$trnstDistM/1609.34)
 
 #Add to DF
 DFsf_m = st_drop_geometry(DFsf) #remove geometry
@@ -1017,44 +1019,44 @@ DF$GE_allYears = ifelse(DF$GE90 == 1 & DF$GE00 == 1, 1,
                         0)
 sum(DF$GE_allYears)
 
-#Create new dataframe for export, select only new variables and the greenspace variables
-figDF = DF[, c('cluster_id','GType90_00','GType00_10','pctC_prkG90_00','pctC_vacG90_00','pctC_othG90_00',
-               'pctC_prkG00_10','pctC_vacG00_10','pctC_othG00_10')]
-
-#Rename to shorten column names
-oldnames_fig = c('cluster_id','GType90_00','GType00_10','pctC_prkG90_00','pctC_vacG90_00','pctC_othG90_00','pctC_prkG00_10','pctC_vacG00_10','pctC_othG00_10')
-newnames_fig = c('cluster_id','GType90_00','GType00_10','pCprk90_00','pCvac90_00','pCoth90_00','pCprk00_10','pCvac00_10','pCoth00_10')
-
-figDF = figDF %>% rename_at(vars(oldnames_fig), ~ newnames_fig)
-
-#Descriptive stats for table in results section
-sum(figDF$pCoth90_00 > 0.01) #293/784 = 37.4%
-sum(figDF$pCoth90_00 < -0.01) #171/784 = 21.8%
-#293+171/784 = 59.2%
-
-sum(figDF$pCoth00_10 > 0.01) #84/784 = 10.7%
-sum(figDF$pCoth00_10 < -0.01) #407/784 = 51.9%
-#84+407/784 = 62.6%
-
-# #Increase in first period, decrease in second period, increase in third period
-# sum(figDF$pCinf90_00 > 0.01 & figDF$pCinf00_10 < -0.01 & figDF$pCinf10_15 > 0.01)
+# #Create new dataframe for export, select only new variables and the greenspace variables
+# figDF = DF[, c('cluster_id','GType90_00','GType00_10','pctC_prkG90_00','pctC_vacG90_00','pctC_othG90_00',
+#                'pctC_prkG00_10','pctC_vacG00_10','pctC_othG00_10')]
 # 
-# #Decrease in first period, increase in second period, decrease in third period
-# sum(figDF$pCinf90_00 < -0.01 & figDF$pCinf00_10 > 0.01 & figDF$pCinf10_15 < -0.01)
+# #Rename to shorten column names
+# oldnames_fig = c('cluster_id','GType90_00','GType00_10','pctC_prkG90_00','pctC_vacG90_00','pctC_othG90_00','pctC_prkG00_10','pctC_vacG00_10','pctC_othG00_10')
+# newnames_fig = c('cluster_id','GType90_00','GType00_10','pCprk90_00','pCvac90_00','pCoth90_00','pCprk00_10','pCvac00_10','pCoth00_10')
 # 
-sum(figDF$pCprk90_00 > 0.01) #24/784 = 3.1%
-sum(figDF$pCprk90_00 < -0.01) #89/784 = 11.4%
-#24+89/784 = 14.4%
-
-sum(figDF$pCprk00_10 > 0.01) #161/784 = 20.5%
-sum(figDF$pCprk00_10 < -0.01) #17/784 = 2.2%
-#161+17/784 = 22.7%
-
-#Saw change in both periods
-sum((figDF$pCprk90_00 > 0.01 | figDF$pCprk90_00 < -0.01) & (figDF$pCprk00_10 > 0.01 | figDF$pCprk00_10 < -0.01)) #79
-#Denominator = saw any change
-sum(figDF$pCprk90_00 > 0.01 | figDF$pCprk90_00 < -0.01 | figDF$pCprk00_10 > 0.01 | figDF$pCprk00_10 < -0.01) #212
-#79/212 = 37.3%
+# figDF = figDF %>% rename_at(vars(oldnames_fig), ~ newnames_fig)
+# 
+# #Descriptive stats for table in results section
+# sum(figDF$pCoth90_00 > 0.01) #293/784 = 37.4%
+# sum(figDF$pCoth90_00 < -0.01) #171/784 = 21.8%
+# #293+171/784 = 59.2%
+# 
+# sum(figDF$pCoth00_10 > 0.01) #84/784 = 10.7%
+# sum(figDF$pCoth00_10 < -0.01) #407/784 = 51.9%
+# #84+407/784 = 62.6%
+# 
+# # #Increase in first period, decrease in second period, increase in third period
+# # sum(figDF$pCinf90_00 > 0.01 & figDF$pCinf00_10 < -0.01 & figDF$pCinf10_15 > 0.01)
+# # 
+# # #Decrease in first period, increase in second period, decrease in third period
+# # sum(figDF$pCinf90_00 < -0.01 & figDF$pCinf00_10 > 0.01 & figDF$pCinf10_15 < -0.01)
+# # 
+# sum(figDF$pCprk90_00 > 0.01) #24/784 = 3.1%
+# sum(figDF$pCprk90_00 < -0.01) #89/784 = 11.4%
+# #24+89/784 = 14.4%
+# 
+# sum(figDF$pCprk00_10 > 0.01) #161/784 = 20.5%
+# sum(figDF$pCprk00_10 < -0.01) #17/784 = 2.2%
+# #161+17/784 = 22.7%
+# 
+# #Saw change in both periods
+# sum((figDF$pCprk90_00 > 0.01 | figDF$pCprk90_00 < -0.01) & (figDF$pCprk00_10 > 0.01 | figDF$pCprk00_10 < -0.01)) #79
+# #Denominator = saw any change
+# sum(figDF$pCprk90_00 > 0.01 | figDF$pCprk90_00 < -0.01 | figDF$pCprk00_10 > 0.01 | figDF$pCprk00_10 < -0.01) #212
+# #79/212 = 37.3%
 
 #Export DF to make figures for paper
 #write.csv(figDF, 'C:/Users/mstuhlm1/Dropbox/Envt Gentrification/Data/Combined/DF4Figures_v6_80th_RR.csv')
@@ -1076,9 +1078,15 @@ options(scipen = 999)
 hist(DF_GE90$dwntwnM)
 hist(DF_GE00$dwntwnM)
 
+hist(DF_GE90$dwntwnMiles)
+hist(DF_GE00$dwntwnMiles)
+
 #Transit Distance
 hist(DF_GE90$trnstDistM)
 hist(DF_GE00$trnstDistM)
+
+hist(DF_GE90$trnstDistMiles)
+hist(DF_GE00$trnstDistMiles)
 
 #Population Density
 hist(DF_GE90$ppl_sqm90)
@@ -1087,7 +1095,40 @@ hist(DF_GE00$ppl_sqm00)
 hist(DF_GE90$ppl_acre90)
 hist(DF_GE00$ppl_acre00)
 
+#% Older housing
 hist(DF_GE90$pct_h30_90)
+ggplot(DF_GE90, aes(x = pct_h30_90, fill = gent90_00)) + 
+  geom_histogram()
+
+# x = DF_GE90$pct_h30_90
+# hist(sqrt(max(x+1) - x))
+# hist(log10(max(x+1) - x))
+# hist(1/(max(x+1) - x))
+
+#calculate skewness:
+skewness(DF_GE90$pct_h30_90)
+skewness(sqrt(max(x+1) - x))
+skewness(log10(max(x+1) - x))
+skewness(1/(max(x+1) - x))
+
+hist(DF_GE00$pct_h30_00)
+ggplot(DF_GE00, aes(x = pct_h30_00, fill = gent00_10)) + 
+  geom_histogram()
+
+# y = DF_GE00$pct_h30_00
+# hist(sqrt(max(y+1) - y))
+# hist(log10(max(y+1) - y))
+# hist(1/(max(y+1) - y))
+
+#calculate skewness:
+skewness(DF_GE00$pct_h30_00)
+skewness(sqrt(max(y+1) - y))
+skewness(log10(max(y+1) - y))
+skewness(1/(max(y+1) - y))
+
+#transform the variables:
+#DF_GE90$pct_h30_90_t = 1/(max(x+1) - x)
+#DF_GE00$pct_h30_00_t = 1/(max(y+1) - y)
 
 #----1990-2000 GE only: GE, gentrified----
 # #1990-2000 Change Model with binary greenspace, % change variables replaced with binary increase. 
@@ -1232,8 +1273,8 @@ vif(model90_00GE_R_nv_sa) #need VIF values to be below 5
 #USED IN ARTICLE TEXT RR2
 #model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
 #                             trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
-model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
-                                   trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnMiles + 
+                                   trnstDistMiles + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv_sa_neigh)
 OddsRatio(model90_00GE_R_nv_sa_neigh)
@@ -1303,7 +1344,7 @@ vif(model00_10_GE_R_nv_sa)
 # (4) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #Sensitivity Analysis with baseline values (use first year of period) instead of percent increase and gentrifying neighbors
 #USED IN ARTICLE TEXT RR2
-model00_10_GE_R_nv_sa_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM + trnstDistM +
+model00_10_GE_R_nv_sa_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnMiles + trnstDistMiles +
                               pct_v00 + pct_hud00 + pct_h30_00 + ppl_acre00 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
 
 summary(model00_10_GE_R_nv_sa_neigh)
@@ -1352,10 +1393,20 @@ summary_GE90_00 = DF_GE90 %>%
             dwntwnM_min = min(dwntwnM),
             dwntwnM_max = max(dwntwnM),
             
+            dwntwnMiles_mean = mean(dwntwnMiles),
+            dwntwnMiles_sd = sd(dwntwnMiles),
+            dwntwnMiles_min = min(dwntwnMiles),
+            dwntwnMiles_max = max(dwntwnMiles),
+            
             trnstDistM_mean = mean(trnstDistM),
             trnstDistM_sd = sd(trnstDistM),
             trnstDistM_min = min(trnstDistM),
             trnstDistM_max = max(trnstDistM),
+            
+            trnstDistMiles_mean = mean(trnstDistMiles),
+            trnstDistMiles_sd = sd(trnstDistMiles),
+            trnstDistMiles_min = min(trnstDistMiles),
+            trnstDistMiles_max = max(trnstDistMiles),
             
             pct_v90_mean = mean(pct_v90),
             pct_v90_sd = sd(pct_v90),
@@ -1414,10 +1465,20 @@ summary_GE00_10 = DF_GE00 %>%
             dwntwnM_min = min(dwntwnM),
             dwntwnM_max = max(dwntwnM),
             
+            dwntwnMiles_mean = mean(dwntwnMiles),
+            dwntwnMiles_sd = sd(dwntwnMiles),
+            dwntwnMiles_min = min(dwntwnMiles),
+            dwntwnMiles_max = max(dwntwnMiles),
+            
             trnstDistM_mean = mean(trnstDistM),
             trnstDistM_sd = sd(trnstDistM),
             trnstDistM_min = min(trnstDistM),
             trnstDistM_max = max(trnstDistM),
+            
+            trnstDistMiles_mean = mean(trnstDistMiles),
+            trnstDistMiles_sd = sd(trnstDistMiles),
+            trnstDistMiles_min = min(trnstDistMiles),
+            trnstDistMiles_max = max(trnstDistMiles),
             
             pct_v_mean = mean(pct_v00),
             pct_v_sd = sd(pct_v00),
