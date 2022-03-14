@@ -65,7 +65,8 @@ MT@data$pct_w = MT@data$race_w / MT@data$orgn_tot
 MT@data$edu_total = MT@data$edu_9 + MT@data$edu_12 + MT@data$edu_hs + MT@data$edu_scol + 
   MT@data$edu_asc + MT@data$edu_bch + MT@data$edu_grad
 
-MT@data$pct_cedu = (MT@data$edu_asc + MT@data$edu_bch + MT@data$edu_grad)/MT@data$edu_total
+#percent with a 4 year college degree
+MT@data$pct_cedu = (MT@data$edu_bch + MT@data$edu_grad)/MT@data$edu_total
 
 #percent vacant housing units (pct_v)
 MT@data$pct_v = MT@data$ohous_vac/MT@data$ohous_tot
@@ -1288,6 +1289,24 @@ varImp(model90_00GE_R_nv_sa_neigh)
 #Check for multicollinearity
 vif(model90_00GE_R_nv_sa_neigh) #need VIF values to be below 5
 
+# (5) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
+#Sensitivity Analysis with baseline values (use first year of period) instead of percent increase, gentrifying neighbor, and SES variables
+model90_00GE_R_nv_sa_neigh_ses = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnMiles + 
+                                   trnstDistMiles + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00 +
+                                     pCedu90 + pct_h90 + pct_b90 + rent90 + income90, family = "binomial", data = DF_GE90)
+
+summary(model90_00GE_R_nv_sa_neigh_ses)
+OddsRatio(model90_00GE_R_nv_sa_neigh_ses)
+
+#Calculate McFadden R2
+PseudoR2(model90_00GE_R_nv_sa_neigh_ses,c("McFadden","McFaddenAdj"))
+
+#Determine variable importance
+varImp(model90_00GE_R_nv_sa_neigh_ses)
+
+#Check for multicollinearity
+vif(model90_00GE_R_nv_sa_neigh_ses) #need VIF values to be below 5
+
 #----2000-2010 GE only: GE, gentrified (with race), no vacant----
 # (1) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #USED IN ARTICLE TEXT (RR1)
@@ -1358,6 +1377,24 @@ varImp(model00_10_GE_R_nv_sa_neigh)
 
 #Check for multicollinearity
 vif(model00_10_GE_R_nv_sa_neigh)
+
+# (5) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
+##Sensitivity Analysis with baseline values (use first year of period) instead of percent increase, gentrifying neighbor, and SES variables
+model00_10_GE_R_nv_sa_neigh_ses = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnMiles + trnstDistMiles +
+                                    pct_v00 + pct_hud00 + pct_h30_00 + ppl_acre00 + B_NeighGent00_10 +
+                                      pCedu00 + pct_h00 + pct_b00 + rent00 + income00, family = "binomial", data = DF_GE00)
+
+summary(model00_10_GE_R_nv_sa_neigh_ses)
+OddsRatio(model00_10_GE_R_nv_sa_neigh_ses)
+
+#Calculate McFadden R2
+PseudoR2(model00_10_GE_R_nv_sa_neigh_ses,c("McFadden","McFaddenAdj"))
+
+#Determine variable importance
+varImp(model00_10_GE_R_nv_sa_neigh_ses)
+
+#Check for multicollinearity
+vif(model00_10_GE_R_nv_sa_neigh_ses)
 
 # STEP 10 -----------------------------------------------
 #Calculate the mean, std, min, max for all variables used in the logit regressions
