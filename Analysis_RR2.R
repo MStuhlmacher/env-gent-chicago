@@ -1116,10 +1116,10 @@ hist(DF_GE00$pct_h30_00)
 ggplot(DF_GE00, aes(x = pct_h30_00, fill = gent00_10)) + 
   geom_histogram()
 
-# y = DF_GE00$pct_h30_00
-# hist(sqrt(max(y+1) - y))
-# hist(log10(max(y+1) - y))
-# hist(1/(max(y+1) - y))
+#y = DF_GE00$pct_h30_00
+#hist(sqrt(max(y+1) - y))
+#hist(log10(max(y+1) - y))
+#hist(1/(max(y+1) - y))
 
 #calculate skewness:
 skewness(DF_GE00$pct_h30_00)
@@ -1230,8 +1230,11 @@ vif(model90_00GE_R_nv) #need VIF values to be below 5
 
 # (2) 1990-2000 Change Model with binary green space, % change variables replaced with binary increase.
 #Gentrifying neighbor added:
-model90_00GE_R_nv_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
-                                trnstDistM + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+#model90_00GE_R_nv_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnMiles + 
+#                                trnstDistMiles + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+model90_00GE_R_nv_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnMiles + 
+                                trnstDistMiles + B_pctV90_00 + B_pctHUD90_00 + B_pct30H90_00 + B_pplSqM90_00 + B_NeighGent90_00 + 
+                                pCedu90 + pct_h90 + pct_b90 + rent90 + income90, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv_neigh)
 OddsRatio(model90_00GE_R_nv_neigh)
@@ -1253,8 +1256,8 @@ vif(model90_00GE_R_nv_neigh) #need VIF values to be below 5
 #model90_00GE_R_nv_sa = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
 #                          trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90, family = "binomial", data = DF_GE90)
 #with ppl/acre
-model90_00GE_R_nv_sa = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnM + 
-                             trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90, family = "binomial", data = DF_GE90)
+model90_00GE_R_nv_sa = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwn + 
+                             trnstDist + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv_sa)
 OddsRatio(model90_00GE_R_nv_sa)
@@ -1276,6 +1279,9 @@ vif(model90_00GE_R_nv_sa) #need VIF values to be below 5
 #                             trnstDistM + pct_v90 + pct_hud90 + pct_h30_90 + ppl_sqm90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
 model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnMiles + 
                                    trnstDistMiles + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
+#no older housing stock:
+model90_00GE_R_nv_sa_neigh = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnMiles + 
+                                   trnstDistMiles + pct_v90 + pct_hud90 + ppl_acre90 + B_NeighGent90_00, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv_sa_neigh)
 OddsRatio(model90_00GE_R_nv_sa_neigh)
@@ -1294,6 +1300,10 @@ vif(model90_00GE_R_nv_sa_neigh) #need VIF values to be below 5
 model90_00GE_R_nv_sa_neigh_ses = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnMiles + 
                                    trnstDistMiles + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + B_NeighGent90_00 +
                                      pCedu90 + pct_h90 + pct_b90 + rent90 + income90, family = "binomial", data = DF_GE90)
+
+model90_00GE_R_nv_sa_neigh_ses = glm(gentSDR90_00 ~ BpctC_prkG90_00 + BpctC_othG90_00 + pA_prkG90 + pA_othG90 + dwntwnMiles + 
+                                       trnstDistMiles + pct_v90 + pct_hud90 + pct_h30_90 + ppl_acre90 + 
+                                       pCedu90 + pct_h90 + pct_b90 + rent90 + income90, family = "binomial", data = DF_GE90)
 
 summary(model90_00GE_R_nv_sa_neigh_ses)
 OddsRatio(model90_00GE_R_nv_sa_neigh_ses)
@@ -1326,8 +1336,8 @@ vif(model00_10_GE_R_nv)
 
 # (2) 2000-2010 Change Model with binary greenspace, % change variables replaced with binary increase. 
 #Gentrifying neighbors added
-model00_10_GE_R_nv_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnM +
-                           trnstDistM + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
+model00_10_GE_R_nv_neigh = glm(gentSDR00_10 ~ BpctC_prkG00_10 + BpctC_othG00_10+ pA_prkG00 + pA_othG00 + dwntwnMiles +
+                           trnstDistMiles + B_pctV00_10 + B_pctHUD00_10 + B_pct30H00_10 + B_pplSqM00_10 + B_NeighGent00_10, family = "binomial", data = DF_GE00)
 
 summary(model00_10_GE_R_nv_neigh)
 OddsRatio(model00_10_GE_R_nv_neigh)
