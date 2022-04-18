@@ -1,6 +1,9 @@
 # The role of formal and informal greenspace in Chicago’s gentrification
 Empirical examination of the role of formal and informal greenspace in environmental gentrification in Chicago between 1990 and 2015. Analysis employs publicly available satellite, census, and land use data (see below for the list of data and sources). 
 
+## Citation:
+Stuhlmacher, Michelle, Yushim Kim, and Ji Eun Kim. (2022). “The Role of Green Space in Chicago’s Gentrification.” Urban Forestry & Urban Greening, 71. https://doi.org/10.1016/j.ufug.2022.127569.
+
 ## Methodology Diagram:
 ![alt text](images/MethodFlowchart.png "Methodology Diagram")
 
